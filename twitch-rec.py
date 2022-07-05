@@ -62,7 +62,22 @@ def main():
     env_client_secret = os.environ.get("CLIENT_SECRET")
     env_pu_token = os.environ.get("PUSHOVER_TOKEN")
     env_pu_user = os.environ.get("PUSHOVER_USER")
+    env_discord_webhook = os.environ.get("DISCORD_WEBHOOK")
     bearer = update_bearer(env_client_id, env_client_secret)
+
+    def discord_webhook(content):
+        data = {
+                "avatar_url": "https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png",
+                "username": f"twitch-rec {env_streamer}",
+                "content": content
+            }
+        r = requests.post(
+            env_discord_webhook, json=data)
+        r.raise_for_status()
+        if r.status_code == 204:
+            logger.info("Discord message sent.")
+        else:
+            logger.info("Discord message failed.")
 
     while True:
         # check stream status
@@ -74,7 +89,10 @@ def main():
                 logger.debug("Successfully updated oauth token.")
             continue
         elif status == 3:
-            logger.error("Unexpected error. Will try again in 5 minutes.")
+            msg="Unexpected error. Will try again in 5 minutes."
+            logger.error(msg)
+            if env_discord_webhook:
+                discord_webhook(msg)
             time.sleep(5*60)
             continue
         elif status == 2:
@@ -88,7 +106,10 @@ def main():
             continue
 
         # stream live
-        logger.info(f"{env_streamer} is live. Recording ...")
+        msg=f"{env_streamer} is live. Recording ..."
+        logger.info(msg)
+        if env_discord_webhook:
+                discord_webhook(msg)
         file_name = env_streamer + "_" + \
             datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".mkv"
 
@@ -122,6 +143,9 @@ def main():
                 logger.info("Pushover message sent.")
             else:
                 logger.info("Pushover message failed.")
+
+        if env_discord_webhook:
+            discord_webhook(f"Recorded: {file_name}")
 
         # Wait for twitch api to refresh
         logger.info("Waiting 5 minutes for the twitch api to refresh...")

@@ -6,7 +6,7 @@ twitch-rec will record your favorite streamer so you don't have to rely on VODs 
 
 Sample docker-compose.yml file to build image and spin-up a container. Clone the repo and change the placeholders.
 
-```
+```yml
 version: '3'
 services:
   twitch-rec:
@@ -23,6 +23,7 @@ services:
       CLIENT_SECRET: xxxxx
       PUSHOVER_TOKEN: xxxxx
       PUSHOVER_USER: xxxxx
+      DISCORD_WEBHOOK: xxxxx
       TZ: Europe/Paris
 ```
 
@@ -34,10 +35,12 @@ services:
 * CLIENT_SECRET
 * PUSHOVER_TOKEN
 * PUSHOVER_USER
+* DISCORD_WEBHOOK
 
 `CLIENT_ID` and `CLIENT_SECRET` can be created at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps).
 
 If you don't use pushover, just delete both lines.
+Same goes for Discord
 
 ## Contributing
 

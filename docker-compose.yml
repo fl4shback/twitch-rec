@@ -14,4 +14,5 @@ services:
       CLIENT_SECRET: xxxxx
       PUSHOVER_TOKEN: xxxxx
       PUSHOVER_USER: xxxxx
+      DISCORD_WEBHOOK: xxxxx
       TZ: Europe/Paris
