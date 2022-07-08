@@ -36,7 +36,7 @@ def check_stream(streamer, client_id, oauth):
         r.raise_for_status()
         info = r.json()
 
-        if info.get("status") == 401:
+        if r.status_code == 401:
             status = 401
         elif info["data"][0]["type"] == "live":
             status = 0
