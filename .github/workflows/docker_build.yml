@@ -9,7 +9,7 @@ permissions:
 jobs:
   build-and-publish-latest:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/docker' # Running this job only for master branch
+    if: github.ref == 'refs/heads/master' # Running this job only for master branch
 
     steps:
     - uses: actions/checkout@v2 # Checking out the repo
